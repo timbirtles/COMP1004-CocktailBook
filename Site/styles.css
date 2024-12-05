@@ -10,16 +10,31 @@ body {
 
 .navbar a {
     float: left;
-    color: white;
+    color: #ffffff;
     text-align: center;
     padding: 25px 16px;
     text-decoration: none;
 }
-
 .navbar a:hover {
-    background-color: #ffffff;
-    color: black;
+    background-color: #222831;
+    color: #00ADB5;
+    padding: 25px 16px;
 }
+
+/*Less padding and larger font size for smaller screens*/
+@media (max-width: 1080px) {
+    .navbar a {
+        padding: 15px 10px;
+        font-size: 20px;
+    }
+
+    .navbar a:hover {
+    padding: 15px 10px;
+    background-color: #222831;
+    color: #00ADB5;
+    }       
+}
+
 
 .navbar-right {
     float: right;
