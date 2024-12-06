@@ -9,11 +9,23 @@
 <body>
 
 <div class="navbar">
-  <a>CocktailBook</a>
+  <a><b>CB</b></a>
     <a>Search</a>
-  <div class="navbar-right">
     <a onclick="">New Recipe</a>
-    <a>Login</a>
+  <div class="navbar-right">
+    <a id="navbarLoginBtn" onclick="displayLoginCard()">Login</a>
+  </div>
+</div>
+
+<div clas="row">
+  <div class="column">&nbsp</div>
+  <div id="loginCard" class="column loginCard">
+    <form>
+      <input type="text" id="loginUsername" name="username" placeholder="Username">
+      <input type="password" id="loginPassword" name="password" placeholder="Password">
+      <input type="button" onclick="loginUser()" id="loginBtn" value="Login">
+      <input type="button" onclick="createUser()" class="btnRight" id="createaccount" value="Create Account & Login">
+    </form>
   </div>
 </div>
 </body>
