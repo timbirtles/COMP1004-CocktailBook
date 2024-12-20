@@ -1,5 +1,95 @@
+$(window).scroll(function() {
+    if ($(window).scrollTop() + $(window).height() >= $(document).height() - 1) {
+        loadRecipes(6);
+    }
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    loadRecipes(0);
+});
+function loadRecipes(count) {
+    // Load users.json into users
+    var recipes = loadFile("recipes.json");
+    // Parse as JSON content 
+    recipes = JSON.parse(recipes);
+
+
+
+    for (var i=count; i<count+13; i++) {
+        var recipe = recipes[i];
+        const obj = {
+            tagName: "DIV",
+            id: "recipeCard" || null,
+            classList: ["recipe-column", "recipeCard"],
+            children: []
+        };
+        const imgChild = {
+            tagName: "img",
+            id: "childParagraph",
+            attributes: {
+                src: "images/cocktails/cover-1.png"
+            }
+        };
+        obj.children.push(imgChild);
+        const titleP = {
+            tagName: "P",
+            id: "title",
+            innerHTML: recipe.name
+        };
+        obj.children.push(titleP);
+        const descP = {
+            tagName: "P",
+            id: "description",
+            innerHTML: recipe.description
+        };
+        obj.children.push(descP);
+        const ingP = {
+            tagName: "P",
+            id: "ingredients",
+            innerHTML: recipe.ingredients
+        };
+        obj.children.push(ingP);    
+        
+        const divElement = createDomElement(obj);
+        document.getElementById("recipeRow").appendChild(divElement);
+    }
+
+
+    function createDomElement(obj) {
+        const element = document.createElement(obj.tagName);
+        
+        if (obj.id) {
+            element.id = obj.id;
+        }
+    
+        if (obj.classList && Array.isArray(obj.classList)) {
+            element.classList.add(...obj.classList);
+        }
+    
+        if (obj.attributes) {
+            Object.entries(obj.attributes).forEach(([key, value]) => {
+                element.setAttribute(key, value);
+            });
+        }
+    
+        if (obj.innerHTML) {
+            element.innerHTML = obj.innerHTML;
+        }
+    
+        if (obj.children && Array.isArray(obj.children)) {
+            obj.children.forEach(childObj => {
+                const childElement = createDomElement(childObj);
+                element.appendChild(childElement); // Append the child element to the parent
+            });
+        }
+    
+        return element;
+    }
+
+}
+
 function displayLoginCard() {
-    console.log("yes");
     document.getElementById("loginCard").style.display = "block";
 }
 

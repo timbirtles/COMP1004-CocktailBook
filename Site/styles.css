@@ -1,24 +1,23 @@
 body {
     /* Remove default page margin */
       margin: 0;
-      background-color: #222831;
+      background-color: #efefef;
     }
 
 .navbar {
     overflow: hidden;
-    background-color: #393D46;
+    background-color: #dcdadd;
 }
 
 .navbar a {
     float: left;
-    color: #ffffff;
+    color: #38343e;
     text-align: center;
     padding: 25px 16px;
     text-decoration: none;
 }
 .navbar a:hover {
-    background-color: #222831;
-    color: #00ADB5;
+    background-color: #c099f1;
     padding: 25px 16px;
 }
 
@@ -44,30 +43,68 @@ body {
 /* Content */
 
 .row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
     width: 100%;
     overflow: hidden;
-    padding: 10px 10px;
+    padding: 10px 0px;
 }
 .column {
     float: left;
-    width: calc(33.3333% - 13.333px);
-    margin-right: 10px;
+    width: calc(35.3333% - 13.333px);
+    margin-right: 1px;
 }
 
 .column:first-child {
-    margin-left: 10px;
-}
-.row::after {
-    content: "";
-    display: table;
-    clear: both;
+    margin-left: 1px;
 }
 
-@media screen and (max-width: 600px) {
-    .column {
-        float: none;
-        width: 100%;
+.recipe-column {
+    float: left;
+    width: calc(15% - 40px);
+    margin-right: 10px;
+    text-align: center;
+    background-color: #DCDADD;
+}
+.recipe-column:first-child {
+   /*margin-left: 1px;*/
+}
+
+@media only screen and (max-width: 1400px) {
+    .recipe-column {
+        width: calc(25% - 40px);
+    }
+    .row {
+        padding: 0;
+    };
+}
+
+@media only screen and (max-width: 800px) {
+    .recipe-column {
+        width: 35%;
+    }
+    .row {
+        padding: 0;
+    };
+}
+
+@media only screen and (max-width: 600px) {
+    .recipe-column {
+        width: 40%;
+        
+    }
+    .row {
+        padding: 0;
         margin: 0;
+    };
+}
+
+@media (pointer:none), (pointer:coarse) {
+    .recipe-column {
+        float: left;
+        width: 100%;
+        margin: 20px 20px 20px 20px;
     }
     .row {
         padding: 0;
@@ -76,9 +113,8 @@ body {
 .loginCard {
     display: none;
     border-radius: 5px;
-    background-color: #EEEEEE;
     padding: 20px;
-    margin-top: 15%;
+    margin-top: 10%;
 }
 
 .loginCard input[type=text], input[type=password], select {
@@ -92,8 +128,8 @@ body {
 }
 .loginCard input[type=button] {
     width: 100%;
-    background-color: #222831;
-    color: #eeeeee;
+    background-color: #38343e;
+    color: #EFEFEF;
     padding: 14px 20px;
     margin: 8px 0;
     border: none;
@@ -105,6 +141,37 @@ body {
     float: right;
 }
 .loginCard input[type=button]:hover {
-    background-color: #0A97B0;
+    background-color: #c099f1;
     scale: 1.05;
+}
+
+.recipeCard {
+    display: block;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 10px;
+    overflow-wrap: break-word;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+.recipeCard #title {
+    font-size: 20px;
+    margin: 5px;
+}
+.recipeCard #description {
+    font-style:italic;
+    font-size: 15px;
+    margin: 0;
+}
+.recipeCard #ingredients {
+    
+    font-size: 15px;
+    margin: 15px 0 0 0;
+}
+.recipeCard img {
+    width: 100%;
+}
+.recipeCard:hover {
+    scale: 1.05;
+    cursor: pointer;
 }
