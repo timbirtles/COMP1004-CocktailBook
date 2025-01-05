@@ -59,15 +59,17 @@ function loadRecipes(count) {
 
     var total = loadedRecipes + count;
     // Start loading recipes from loadedRecipes value to loadedRecipes+count
-    for (var i = loadedRecipes; i < total; i++) {
+    for (let i = loadedRecipes; i < total; i++) {     
         // Check recipe exists
         if (recipes[i]) {
+            let recipeID = i;
             // Create new object with each element (img, title, description, ingredients)
             var recipe = recipes[i];
             const obj = {
                 tagName: "DIV",
                 id: "recipeCard" || null,
                 classList: ["recipe-column", "recipeCard"],
+                onClick: null,
                 children: []
             };
             const imgChild = {
@@ -98,9 +100,10 @@ function loadRecipes(count) {
                 innerHTML: ingredientsString
             };
             obj.children.push(ingP);
-
+            
             // Create dom element
             const divElement = createDomElement(obj);
+            divElement.onclick = (event) => ViewRecipe(event, recipeID);
             // Add element to document
             document.getElementById("recipeRow").appendChild(divElement);
             // Increment counter
@@ -148,6 +151,44 @@ function loadRecipes(count) {
         return element;
     }
 
+}
+
+function ViewRecipe(event, id, close) {
+
+    // True when close button is pressed
+    if (close) {
+        // Set display to 'none' to hide recipeView
+        document.getElementById("recipeView").style.display = "none";
+    }
+    else {
+        var recipes = loadFile("recipes.json");
+        recipes = JSON.parse(recipes);
+
+        // Delete data that may have previously populated the recipe viewer
+        document.getElementById("recipeView_ingredient_list").innerHTML="";
+        document.getElementById("recipeView_method_list").innerHTML="";
+
+        var list = document.getElementById("recipeView_ingredient_list");
+        recipes[id].ingredients.forEach((ingredient) => {
+            var entry = document.createElement('li');
+            entry.appendChild(document.createTextNode(ingredient));
+            list.appendChild(entry);
+        });
+
+        var list = document.getElementById("recipeView_method_list");
+        recipes[id].method.forEach((instruction) => {
+            var entry = document.createElement('li');
+            entry.appendChild(document.createTextNode(instruction));
+            list.appendChild(entry);
+        });
+
+        document.getElementById("recipeView_title").innerText = recipes[id].name;
+        document.getElementById("recipeView_img").src = recipes[id].image_name;
+        //document.getElementById("recipeView_ingredient_list").innerText = recipes[id].method;
+        document.getElementById("recipeView").style.display = "block";
+
+        document.getElementById("recipeView_button").style.display = "block";
+    }
 }
 
 function displayLoginCard() {
@@ -203,6 +244,8 @@ async function createUser() {
         console.error("There was a problem with fetch operation");
     }
 }
+
+var loggedInUser = "";
 
 function loginUser() {
 

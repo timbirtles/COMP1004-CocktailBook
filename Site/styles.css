@@ -60,6 +60,9 @@ body {
     margin-left: 1px;
 }
 
+.recipe-view-column {
+}
+
 .recipe-column {
     float: left;
     width: calc(15% - 40px);
@@ -177,13 +180,50 @@ body {
 .recipeCard #ingredients {
     margin: 0;
     font-size: 15px;
-    
-    /*margin: 15px 0 0 0;*/
 }
 .recipeCard img {
     width: 100%;
 }
 .recipeCard:hover {
     scale: 1.05;
+    cursor: pointer;
+}
+
+.recipeView {
+    position: relative;
+    display: none;
+    max-height: 50vh;
+    background-color: #DCDADD;
+    padding: 10px;
+    /* Apply margins all round and set width */
+    margin-top: 10px;
+    margin-left: 10%;
+    margin-right: 10%;
+    width: 80%;
+    /* If content is too large, add a scroll bar */
+    overflow: scroll;
+
+    font-family:Arial, Helvetica, sans-serif;
+}
+.recipeView h1 {
+    font-weight: normal;
+}
+.recipeView h2 {
+    font-weight: normal;
+    font-size: large;
+}
+.recipeView img {
+    float: right;
+    max-width: 20%;
+}
+.recipeView input[type=button] {
+    display: none;
+    position: relative;
+    background-color: #38343e;
+    color: #EFEFEF;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
 }

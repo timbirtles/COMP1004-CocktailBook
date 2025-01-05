@@ -8,6 +8,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 
+<!---Navbar -->
 <div class="navbar" id="navbar">
   <a><b>CB</b></a>
     <a>Search</a>
@@ -17,6 +18,7 @@
   </div>
 </div>
 
+<!--Login Section-->
 <div class="row">
   <div id="loginCard" class="column loginCard">
     <form>
@@ -27,6 +29,19 @@
     </form>
   </div>
 </div>
+
+<!--Recipe View-->
+<div id="recipeView" class="recipeView">
+  <img id="recipeView_img" src="images/cocktails/cover-1.png" alt="cover image">
+  <h1 id="recipeView_title"></h1>
+  <h2>Ingredients</h2>
+  <ul id="recipeView_ingredient_list"></ul>
+  <h2>Method</h2>
+  <ol id="recipeView_method_list"></ol>  
+  <input id="recipeView_button" type="button" onclick="ViewRecipe(null, 0, true)" value="Close">
+</div>
+
+<!--Container for recipe cards-->
 <div id="recipeRow" class="row">
 
 

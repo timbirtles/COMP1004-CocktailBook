@@ -4,251 +4,323 @@
         "name": "Roku Fizz1",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Muddle the raspberries and add to a glass", "Pour in the gin", "Top with lemonade"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
         "id": 2,
         "name": "Gin & Tonic2",
         "description": "A classic gin and tonic",
         "ingredients": ["Gin", "Tonic Water", "Ice"],
-        "image-name": "cover-image-1.png"
+        "method": ["Muddle the raspberries and add to a glass", "Pour in the gin", "Top with lemonade"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
         "id": 3,
         "name": "3",
-        "description": "a simple recipe..",
+        "description": "a simple recipe..1",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three", "Instruction three", "Instruction three", "Instruction three", "Instruction three", "Instruction three", "Instruction three","Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
         "id": 4,
         "name": "4",
-        "description": "a simple recipe..",
+        "description": "a simple recipe..2",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
+        "id": 5,
         "name": "5",
-        "description": "a simple recipe..",
+        "description": "a simple recipe..3",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
+        "id": 6,
         "name": "6",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
+        "id": 7,
         "name": "7",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
+        "id": 8,
         "name": "8",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
+        "id": 9,
         "name": "9",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
+        "id": 10,
         "name": "10",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
+        "id": 11,
         "name": "11",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
+        "id": 12,
         "name": "12",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
+        "id": 13,
         "name": "13",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
+        "id": 14,
         "name": "14",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
+        "id": 15,
         "name": "15",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
+        "id": 16,
         "name": "16",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
+        "id": 17,
         "name": "17",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
+        "id": 18,
         "name": "18",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
+        "id": 19,
         "name": "19",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
+        "id": 20,
         "name": "20",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
+        "id": 21,
         "name": "21",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
+        "id": 22,
         "name": "22",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
+        "id": 23,
         "name": "23",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
+        "id": 24,
         "name": "24",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
+        "id": 25,
         "name": "25",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
-        "name": "24",
+        "id": 26,
+        "name": "26",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
-        "name": "24",
+        "id": 27,
+        "name": "27",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
-        "name": "24",
+        "id": 28,
+        "name": "28",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
-        "name": "24",
+        "id": 29,
+        "name": "29",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
-        "name": "24",
+        "id": 30,
+        "name": "30",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
-        "name": "24",
+        "id": 31,
+        "name": "31",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
-        "name": "24",
+        "id": 32,
+        "name": "32",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
-        "name": "24",
+        "id": 33,
+        "name": "33",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
-        "name": "24",
+        "id": 34,
+        "name": "34",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
-        "name": "24",
+        "id": 35,
+        "name": "35",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     },
     {
-        "id": 4,
-        "name": "24",
+        "id": 36,
+        "name": "36",
         "description": "a simple recipe..",
         "ingredients": ["Gin", "Raspberries", "Lemonade"],
-        "image-name": "cover-image-1.png"
+        "method": ["Instruction one", "Instruction two", "Instruction three"],
+        "image_name": "images/cocktails/cover-1.png",
+        "owner": 1
     }
 ]
