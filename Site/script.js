@@ -8,12 +8,7 @@ $(window).scroll(function () {
 
 document.addEventListener("DOMContentLoaded", function () {
     console.log($(window).width());
-    loadRecipes(1);
-    
-
-    setTimeout(() => {
-        loadRecipes(calculateTotalRecipeCards());
-    }, 100);
+    loadInitialRecipes();
 
     
 });
@@ -49,6 +44,16 @@ function calculateTotalRecipeCards() {
     return (hCount * (calculateRecipeRowsNeeded()+1))-1;
 }
 // Counter for number of recipes loaded
+
+function loadInitialRecipes() {
+    loadedRecipes = 0;
+    document.getElementById("recipeRow").innerHTML="";
+    loadRecipes(1);
+    setTimeout(() => {
+        loadRecipes(calculateTotalRecipeCards());
+    }, 100);
+}
+
 var loadedRecipes = 0;
 
 function loadRecipes(count) {
@@ -63,46 +68,10 @@ function loadRecipes(count) {
         // Check recipe exists
         if (recipes[i]) {
             let recipeID = i;
-            // Create new object with each element (img, title, description, ingredients)
             var recipe = recipes[i];
-            const obj = {
-                tagName: "DIV",
-                id: "recipeCard" || null,
-                classList: ["recipe-column", "recipeCard"],
-                onClick: null,
-                children: []
-            };
-            const imgChild = {
-                tagName: "img",
-                id: "childParagraph",
-                attributes: {
-                    src: "images/cocktails/cover-1.png"
-                }
-            };
-            obj.children.push(imgChild);
-            const titleP = {
-                tagName: "P",
-                id: "title",
-                innerHTML: recipe.name
-            };
-            obj.children.push(titleP);
-            const descP = {
-                tagName: "P",
-                id: "description",
-                innerHTML: recipe.description
-            };
-            obj.children.push(descP);
-            // Separate each ingredient in array with a comma and whitespace
-            const ingredientsString = recipe.ingredients.join(', ');
-            const ingP = {
-                tagName: "P",
-                id: "ingredients",
-                innerHTML: ingredientsString
-            };
-            obj.children.push(ingP);
-            
-            // Create dom element
-            const divElement = createDomElement(obj);
+             // Create new object with each child element (img, title, description, ingredients)
+            const divElement = createDivElement(recipe);
+            // Set onclick listener
             divElement.onclick = (event) => ViewRecipe(event, recipeID);
             // Add element to document
             document.getElementById("recipeRow").appendChild(divElement);
@@ -194,6 +163,201 @@ function ViewRecipe(event, id, close) {
 function displayLoginCard() {
     document.getElementById("loginCard").style.display = "block";
 }
+
+const searchFilters = [];
+
+function toggleSearchFilter(item) {
+    // Get index of item in searchFilters array
+    let index = searchFilters.indexOf(item);
+    // suffix for each search filter item id
+    var idSuffix = "_searchfilter";
+
+    let itemID = item + idSuffix;
+    itemID = itemID.replace(/\s+/g, '-').toLowerCase();
+
+    // If the item is not in the array:
+    if (index == -1) {
+        // Add the item
+        searchFilters.push(item);
+        // Update class list to change colours
+        document.getElementById(itemID).classList.add("searchItemToggled");
+    }
+    // If the item is in the array
+    else {
+        // Remove the item
+        searchFilters.splice(index, 1);
+        // Update class list to change colours
+        document.getElementById(itemID).classList.remove("searchItemToggled");
+    }
+    console.log(searchFilters);
+}
+
+// Returns true if the all the elements of array1 are present in array2
+function canMakeRecipe(array1, array2) {
+    return array1.every(item => array2.includes(item));
+}
+
+// Creates a dom element from a collection of objects
+function createDivElement(recipe) {
+
+    // Parent object
+    const obj = {
+        tagName: "DIV",
+        id: "recipeCard" || null,
+        classList: ["recipe-column", "recipeCard"],
+        onClick: null,
+        children: []
+    };
+    // Child objects
+    const imgChild = {
+        tagName: "img",
+        id: "childParagraph",
+        attributes: {
+            src: "images/cocktails/cover-1.png"
+        }
+    };
+    obj.children.push(imgChild);
+    const titleP = {
+        tagName: "P",
+        id: "title",
+        innerHTML: recipe.name
+    };
+    obj.children.push(titleP);
+    const descP = {
+        tagName: "P",
+        id: "description",
+        innerHTML: recipe.description
+    };
+    obj.children.push(descP);
+    // Separate each ingredient in array with a comma and whitespace
+    const ingredientsString = recipe.ingredients.join(', ');
+    const ingP = {
+        tagName: "P",
+        id: "ingredients",
+        innerHTML: ingredientsString
+    };
+    obj.children.push(ingP);
+    
+    // Create dom element
+    const divElement = createDomElement(obj);
+
+    // Creates dom element from collection of objects
+    function createDomElement(obj) {
+        // Create blank element
+        const element = document.createElement(obj.tagName);
+
+        // Set element id if obj has an id
+        if (obj.id) {
+            element.id = obj.id;
+        }
+
+        // Check .classList isn't null and is an array
+        if (obj.classList && Array.isArray(obj.classList)) {
+            // Add each element in array to class list
+            element.classList.add(...obj.classList);
+        }
+
+        // Check .attributes isn't null
+        if (obj.attributes) {
+            // Add each attirubte to element
+            Object.entries(obj.attributes).forEach(([key, value]) => {
+                element.setAttribute(key, value);
+            });
+        }
+
+        // Check .innerHTML isn't null and add to element
+        if (obj.innerHTML) {
+            element.innerHTML = obj.innerHTML;
+        }
+
+        // Create DOM element for each child and append to parent
+        if (obj.children && Array.isArray(obj.children)) {
+            obj.children.forEach(childObj => {
+                const childElement = createDomElement(childObj);
+                element.appendChild(childElement); // Append the child element to the parent
+            });
+        }
+
+        return element;
+    }
+
+    return divElement;
+}
+
+// 
+function searchRecipes() {
+    // Check if any filters have been applied
+    if (searchFilters.length === 0) {
+        // Remove all recipe cards from list
+        loadInitialRecipes();
+
+    }
+    else {
+
+        var recipes = loadFile("recipes.json");
+        // Parse as JSON content 
+        recipes = JSON.parse(recipes);
+
+        document.getElementById("recipeRow").innerHTML="";
+
+        // Get number of recipes
+        var total = Object.keys(recipes).length;
+        console.log("filters are " + searchFilters);
+        // Start loading recipes from loadedRecipes value to loadedRecipes+count
+        for (let i = 0; i < total-1; i++) {
+            if (canMakeRecipe(recipes[i].ingredients, searchFilters)) {
+                console.log("filters match: " + recipes[i].ingredients + " " + searchFilters)
+                let recipeID = i;
+                // Create new object with each element (img, title, description, ingredients)
+                var recipe = recipes[i];
+                const divElement = createDivElement(recipe);
+                divElement.onclick = (event) => ViewRecipe(event, recipeID);
+                // Add element to document
+                document.getElementById("recipeRow").appendChild(divElement);
+            }
+        }  
+    }
+
+    // function createDomElement(obj) {
+    //     // Create blank element
+    //     const element = document.createElement(obj.tagName);
+
+    //     // Set element id if obj has an id
+    //     if (obj.id) {
+    //         element.id = obj.id;
+    //     }
+
+    //     // Check .classList isn't null and is an array
+    //     if (obj.classList && Array.isArray(obj.classList)) {
+    //         // Add each element in array to class list
+    //         element.classList.add(...obj.classList);
+    //     }
+
+    //     // Check .attributes isn't null
+    //     if (obj.attributes) {
+    //         // Add each attirubte to element
+    //         Object.entries(obj.attributes).forEach(([key, value]) => {
+    //             element.setAttribute(key, value);
+    //         });
+    //     }
+
+    //     // Check .innerHTML isn't null and add to element
+    //     if (obj.innerHTML) {
+    //         element.innerHTML = obj.innerHTML;
+    //     }
+
+    //     // Create DOM element for each child and append to parent
+    //     if (obj.children && Array.isArray(obj.children)) {
+    //         obj.children.forEach(childObj => {
+    //             const childElement = createDomElement(childObj);
+    //             element.appendChild(childElement); // Append the child element to the parent
+    //         });
+    //     }
+
+    //     return element;
+    // }
+}
+
 
 // Check if username exists in users.json
 function UserExists(username) {

@@ -19,6 +19,27 @@
   </div>
 </div>
 
+<!--Search Section-->
+<div class="row">
+  <div id="searchCard" class="column searchCard">
+    <!---Filters-->
+    <form>
+      <input type="text" id="searchInput" name="search" placeholder="Search...">
+      <input type="button" class="searchItem" onclick="toggleSearchFilter('Gin')" id="gin_searchfilter" value="Gin">
+      <input type="button" class="searchItem" onclick="toggleSearchFilter('Raspberries')" id="raspberries_searchfilter" value="Raspberries">
+      <input type="button" class="searchItem" onclick="toggleSearchFilter('Ice')" id="ice_searchfilter" value="Ice">
+      <input type="button" class="searchItem" onclick="toggleSearchFilter('Tonic Water')" id="tonic-water_searchfilter" value="Tonic Water">
+      <input type="button" class="searchItem" onclick="toggleSearchFilter('Lemonade')" id="lemonade_searchfilter" value="Lemonade">
+    </form>
+
+    <form>
+      <input type="button" class="searchCardButton" onclick="searchRecipes()" id="" value="Apply">
+     </form>
+
+    </form>
+  </div>
+</div>
+
 <!--Login Section-->
 <div class="row">
   <div id="loginCard" class="column loginCard">
