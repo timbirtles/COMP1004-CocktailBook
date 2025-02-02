@@ -5,13 +5,70 @@ $(window).scroll(function () {
     }
 });
 
-
+// Runs once page content has loaded
 document.addEventListener("DOMContentLoaded", function () {
     console.log($(window).width());
+    // Loads one recipe then calculates how many are needed to fill the viewport
+    // and loads the rest
     loadInitialRecipes();
-
-    
+    // Populate the search filters based on ingredients in the JSON.
+    populateSearchFilters();
 });
+
+// Creates dom element from collection of objects
+function createDomElement(obj) {
+    // Create blank element
+    const element = document.createElement(obj.tagName);
+
+    // Set element id if obj has an id
+    if (obj.id) {
+        element.id = obj.id;
+    }
+
+    // Check .classList isn't null and is an array
+    if (obj.classList && Array.isArray(obj.classList)) {
+        // Add each element in array to class list
+        element.classList.add(...obj.classList);
+    }
+
+    // Check .attributes isn't null
+    if (obj.attributes) {
+        // Add each attirubte to element
+        Object.entries(obj.attributes).forEach(([key, value]) => {
+            element.setAttribute(key, value);
+        });
+    }
+
+    // Check and set type property if exists
+    if (obj.type) {
+        element.type = obj.type;
+    }
+
+    // Check and set value property if exists
+    if (obj.value) {
+        element.value = obj.value;
+    }
+
+    // Check .innerHTML isn't null and add to element
+    if (obj.innerHTML) {
+        element.innerHTML = obj.innerHTML;
+    }
+
+    // Create DOM element for each child and append to parent
+    if (obj.children && Array.isArray(obj.children)) {
+        obj.children.forEach(childObj => {
+            const childElement = createDomElement(childObj);
+            element.appendChild(childElement); // Append the child element to the parent
+        });
+    }
+
+    return element;
+}
+
+
+// ====================================================================
+//                          VIEW RECIPES  
+// ====================================================================
 
 function calculateRecipeRowsNeeded() {
     if (document.getElementById('recipeCard')) {
@@ -70,7 +127,7 @@ function loadRecipes(count) {
             let recipeID = i;
             var recipe = recipes[i];
              // Create new object with each child element (img, title, description, ingredients)
-            const divElement = createDivElement(recipe);
+            const divElement = createRecipeElement(recipe);
             // Set onclick listener
             divElement.onclick = (event) => ViewRecipe(event, recipeID);
             // Add element to document
@@ -79,47 +136,6 @@ function loadRecipes(count) {
             loadedRecipes++;
         }
     }
-
-    // Create DOM element from parent and children
-    function createDomElement(obj) {
-        // Create blank element
-        const element = document.createElement(obj.tagName);
-
-        // Set element id if obj has an id
-        if (obj.id) {
-            element.id = obj.id;
-        }
-
-        // Check .classList isn't null and is an array
-        if (obj.classList && Array.isArray(obj.classList)) {
-            // Add each element in array to class list
-            element.classList.add(...obj.classList);
-        }
-
-        // Check .attributes isn't null
-        if (obj.attributes) {
-            // Add each attirubte to element
-            Object.entries(obj.attributes).forEach(([key, value]) => {
-                element.setAttribute(key, value);
-            });
-        }
-
-        // Check .innerHTML isn't null and add to element
-        if (obj.innerHTML) {
-            element.innerHTML = obj.innerHTML;
-        }
-
-        // Create DOM element for each child and append to parent
-        if (obj.children && Array.isArray(obj.children)) {
-            obj.children.forEach(childObj => {
-                const childElement = createDomElement(childObj);
-                element.appendChild(childElement); // Append the child element to the parent
-            });
-        }
-
-        return element;
-    }
-
 }
 
 function ViewRecipe(event, id, close) {
@@ -160,11 +176,58 @@ function ViewRecipe(event, id, close) {
     }
 }
 
+// Make login card visible
 function displayLoginCard() {
     document.getElementById("loginCard").style.display = "block";
+    // Hide other cards that clutter the layout
+    document.getElementById("searchCard").style.display = "none";
+    document.getElementById("recipeView").style.display = "none";
+    document.getElementById("recipeRow").style.display = "none";
 }
 
+
+
+// ====================================================================
+//                              SEARCH  
+// ====================================================================
+// Make search card visible
+function displaySearchCard() {
+    document.getElementById("searchCard").style.display = "block";
+    // Ensure recipe cards are visible
+    document.getElementById("recipeRow").style.display = "flex";
+    // Hide other cards that clutter the layout
+    document.getElementById("loginCard").style.display = "none";
+    document.getElementById("recipeView").style.display = "none";
+}
+
+// Stores applied search filters
 const searchFilters = [];
+
+
+function createSearchFilterElement(filterObj) {
+
+    var idSuffix = "_searchfilter";
+
+    let itemID = filterObj + idSuffix;
+    itemID = itemID.replace(/\s+/g, '-').toLowerCase();
+
+    // Parent object
+    const obj = {
+        tagName: "INPUT",
+        type: "button",
+        id: itemID,
+        classList: ["searchItem"],
+        value: filterObj,
+        onClick: null,
+        children: []
+    };
+    
+    // Create dom element
+    const divElement = createDomElement(obj);
+
+    return divElement;
+    
+}
 
 function toggleSearchFilter(item) {
     // Get index of item in searchFilters array
@@ -192,13 +255,44 @@ function toggleSearchFilter(item) {
     console.log(searchFilters);
 }
 
+
+function populateSearchFilters() {
+    var recipes = loadFile("recipes.json");
+    // Parse as JSON content 
+    recipes = JSON.parse(recipes);
+
+    var ingredients = [];
+    // Get number of recipes
+    var total = Object.keys(recipes).length;
+    // Start loading recipes from loadedRecipes value to loadedRecipes+count
+    for (let i = 0; i < total-1; i++) {
+        for (let x = 0; x < recipes[i].ingredients.length; x++) {
+            let index = ingredients.indexOf(recipes[i].ingredients[x]);
+            if (index == -1) {
+                ingredients.push(recipes[i].ingredients[x]);
+                const divElement = createSearchFilterElement(recipes[i].ingredients[x]);
+                divElement.onclick = (event) => toggleSearchFilter(recipes[i].ingredients[x]);
+                // Add element to document
+                document.getElementById("searchForm").appendChild(divElement);
+            }
+            else {
+                // Do nothing
+            }
+        }
+    }
+
+    console.log("Ingredients are " + ingredients);
+
+}
+
+
 // Returns true if the all the elements of array1 are present in array2
 function canMakeRecipe(array1, array2) {
     return array1.every(item => array2.includes(item));
 }
 
 // Creates a dom element from a collection of objects
-function createDivElement(recipe) {
+function createRecipeElement(recipe) {
 
     // Parent object
     const obj = {
@@ -241,51 +335,16 @@ function createDivElement(recipe) {
     // Create dom element
     const divElement = createDomElement(obj);
 
-    // Creates dom element from collection of objects
-    function createDomElement(obj) {
-        // Create blank element
-        const element = document.createElement(obj.tagName);
-
-        // Set element id if obj has an id
-        if (obj.id) {
-            element.id = obj.id;
-        }
-
-        // Check .classList isn't null and is an array
-        if (obj.classList && Array.isArray(obj.classList)) {
-            // Add each element in array to class list
-            element.classList.add(...obj.classList);
-        }
-
-        // Check .attributes isn't null
-        if (obj.attributes) {
-            // Add each attirubte to element
-            Object.entries(obj.attributes).forEach(([key, value]) => {
-                element.setAttribute(key, value);
-            });
-        }
-
-        // Check .innerHTML isn't null and add to element
-        if (obj.innerHTML) {
-            element.innerHTML = obj.innerHTML;
-        }
-
-        // Create DOM element for each child and append to parent
-        if (obj.children && Array.isArray(obj.children)) {
-            obj.children.forEach(childObj => {
-                const childElement = createDomElement(childObj);
-                element.appendChild(childElement); // Append the child element to the parent
-            });
-        }
-
-        return element;
-    }
 
     return divElement;
 }
 
+
 // 
 function searchRecipes() {
+    // Delete any error text from previous searches
+    document.getElementById("searchErrorP").innerHTML="";
+
     // Check if any filters have been applied
     if (searchFilters.length === 0) {
         // Remove all recipe cards from list
@@ -304,61 +363,31 @@ function searchRecipes() {
         var total = Object.keys(recipes).length;
         console.log("filters are " + searchFilters);
         // Start loading recipes from loadedRecipes value to loadedRecipes+count
+        var recipesFound = 0;
         for (let i = 0; i < total-1; i++) {
             if (canMakeRecipe(recipes[i].ingredients, searchFilters)) {
+                recipesFound++;
                 console.log("filters match: " + recipes[i].ingredients + " " + searchFilters)
                 let recipeID = i;
                 // Create new object with each element (img, title, description, ingredients)
                 var recipe = recipes[i];
-                const divElement = createDivElement(recipe);
+                const divElement = createRecipeElement(recipe);
                 divElement.onclick = (event) => ViewRecipe(event, recipeID);
                 // Add element to document
                 document.getElementById("recipeRow").appendChild(divElement);
+                
             }
         }  
+        if (recipesFound == 0) {
+            document.getElementById("searchErrorP").innerHTML="Could not find any recipes matching the criteria";
+        }
     }
-
-    // function createDomElement(obj) {
-    //     // Create blank element
-    //     const element = document.createElement(obj.tagName);
-
-    //     // Set element id if obj has an id
-    //     if (obj.id) {
-    //         element.id = obj.id;
-    //     }
-
-    //     // Check .classList isn't null and is an array
-    //     if (obj.classList && Array.isArray(obj.classList)) {
-    //         // Add each element in array to class list
-    //         element.classList.add(...obj.classList);
-    //     }
-
-    //     // Check .attributes isn't null
-    //     if (obj.attributes) {
-    //         // Add each attirubte to element
-    //         Object.entries(obj.attributes).forEach(([key, value]) => {
-    //             element.setAttribute(key, value);
-    //         });
-    //     }
-
-    //     // Check .innerHTML isn't null and add to element
-    //     if (obj.innerHTML) {
-    //         element.innerHTML = obj.innerHTML;
-    //     }
-
-    //     // Create DOM element for each child and append to parent
-    //     if (obj.children && Array.isArray(obj.children)) {
-    //         obj.children.forEach(childObj => {
-    //             const childElement = createDomElement(childObj);
-    //             element.appendChild(childElement); // Append the child element to the parent
-    //         });
-    //     }
-
-    //     return element;
-    // }
 }
 
 
+// ====================================================================
+//                    LOGIN / ACCOUNT CREATION
+// ====================================================================
 // Check if username exists in users.json
 function UserExists(username) {
     try {
@@ -431,6 +460,7 @@ function loginUser() {
     if (user) {
         document.getElementById("loginCard").style.display = "none";
         document.getElementById("navbarLoginBtn").innerHTML = "Hello, " + user.username + "!";
+        document.getElementById("recipeRow").style.display = "flex";
     }
     // Otherwise alert the user something went wrong
     else {
@@ -438,6 +468,9 @@ function loginUser() {
     }
 }
 
+// ====================================================================
+//                              JSON 
+// ====================================================================
 
 function loadFile(filePath) {
     var result = null;

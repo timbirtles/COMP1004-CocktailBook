@@ -1,99 +1,6 @@
 
 /*Less padding and larger font size for smaller screens*/
 
-/* Screens smaller than 600px ----------------------- */
-@media only screen and (max-width: 600px) {
-    .recipe-column {
-        width: calc(100% - 40px);
-    }
-
-    .row {
-        padding: 0;
-    };
-
-    /* Recipe view */
-    .recipeView {
-        width: 100%;
-        box-sizing: border-box; /* Ensures padding is included in width */
-        max-height: none;
-        padding: 5%;
-        /* Apply margins all round and set width */
-        margin: 1% auto;
-        max-width: 99%;
-        font-family:Arial, Helvetica, sans-serif;
-    }
-    .recipeView h1 {
-        font-weight: normal;
-    }
-    .recipeView h2 {
-        font-weight: normal;
-        font-size: large;
-    }
-    .recipeView img {
-        float: none; /* Remove the float */
-        display: block; /* Make it a block element for centering */
-        margin: 0 auto; /* Center the image horizontally */
-        max-width: 70%;
-    }
-    .recipeView input[type=button] {
-        display: none;
-        position: relative;
-        background-color: #38343e;
-        color: #EFEFEF;
-        padding: 14px 20px;
-        margin: 8px 0;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-}
-/* Screens between 600px and 800px ----------------------- */
-@media only screen and (max-width: 800px) {
-    .recipe-column {
-        width: 35%;
-    }
-
-    .row {
-        padding: 0;
-    };
-
-    /* Recipe view */
-    .recipeView {
-        width: 100%;
-        box-sizing: border-box; /* Ensures padding is included in width */
-        max-height: none;
-        padding: 5%;
-        /* Apply margins all round and set width */
-        margin: 1% auto;
-        max-width: 99%;
-        font-family:Arial, Helvetica, sans-serif;
-    }
-    .recipeView h1 {
-        font-weight: normal;
-    }
-    .recipeView h2 {
-        font-weight: normal;
-        font-size: large;
-    }
-    .recipeView img {
-        float: right;
-        max-width: 20%;
-    }
-    .recipeView input[type=button] {
-        display: none;
-        position: relative;
-        background-color: #38343e;
-        color: #EFEFEF;
-        padding: 14px 20px;
-        margin: 8px 0;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-
-}
 
 /* Screens between 800px and 1700px ----------------------- */
 @media only screen and (max-width: 1700px) {
@@ -106,12 +13,10 @@
 
     .recipeView {
         background-color: #DCDADD;
-        /* Apply margins all round and set width */
         width: 100%;
-        box-sizing: border-box; /* Ensures padding is included in width */
+        box-sizing: border-box; 
         max-height: none;
         padding: 5%;
-        /* Apply margins all round and set width */
         margin: 1% auto;
         max-width: 99%;
         font-family:Arial, Helvetica, sans-serif;
@@ -149,6 +54,97 @@
     }
 }
 
+/* Screens between 600px and 800px ----------------------- */
+@media only screen and (max-width: 800px) {
+    .recipe-column {
+        width: 35%;
+    }
+
+    .row {
+        padding: 0;
+    };
+
+    /* Recipe view */
+    .recipeView {
+        width: 100%;
+        box-sizing: border-box; /* Ensures padding is included in width */
+        max-height: none;
+        padding: 5%;
+        margin: 1% auto;
+        max-width: 99%;
+        font-family:Arial, Helvetica, sans-serif;
+    }
+    .recipeView h1 {
+        font-weight: normal;
+    }
+    .recipeView h2 {
+        font-weight: normal;
+        font-size: large;
+    }
+    .recipeView img {
+        float: right;
+        max-width: 20%;
+    }
+    .recipeView input[type=button] {
+        display: none;
+        position: relative;
+        background-color: #38343e;
+        color: #EFEFEF;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+}
+
+/* Screens smaller than 600px ----------------------- */
+@media only screen and (max-width: 600px) { 
+    .recipe-column {
+        width: calc(80%); /* Adjust width for spacing */
+    }
+    
+    
+
+    /* Recipe view */
+    .recipeView {
+        width: 100%;
+        box-sizing: border-box;
+        max-height: none;
+        padding: 5%;
+        margin: 1% auto;
+        max-width: 99%;
+        font-family:Arial, Helvetica, sans-serif;
+    }
+    .recipeView h1 {
+        font-weight: normal;
+    }
+    .recipeView h2 {
+        font-weight: normal;
+        font-size: large;
+    }
+    .recipeView img {
+        float: none; 
+        display: block; 
+        margin: 0 auto; 
+        max-width: 70%;
+    }
+    .recipeView input[type=button] {
+        display: none;
+        position: relative;
+        background-color: #38343e;
+        color: #EFEFEF;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+}
+
+
+
 /* Mobile devices  ----------------------- */
 @media (pointer:none), (pointer:coarse) {
 
@@ -177,16 +173,12 @@
    /* Recipe view */
    .recipeView {
         background-color: #DCDADD;
-        /* Apply margins all round and set width */
         width: 100%;
         max-height: none;
         padding: 5%;
-        /* Apply margins all round and set width */
         margin-top: 0px;
         margin-left: 0%;
         margin-right: 0%;
-        /* If content is too large, add a scroll bar */
-
         font-family:Arial, Helvetica, sans-serif;
         }
     .recipeView h1 {
@@ -202,9 +194,9 @@
         font-size: 2rem;
     }
     .recipeView img {
-        float: none; /* Remove the float */
-        display: block; /* Make it a block element for centering */
-        margin: 0 auto; /* Center the image horizontally */
+        float: none;
+        display: block;
+        margin: 0 auto; 
         max-width: 70%;
     }
     .recipeView input[type=button] {
@@ -241,4 +233,61 @@
         margin: 0;
         font-size: 2rem;
     }
+
+
+    /* Search */
+
+    .searchCard {
+        display: none;
+        border-radius: 5px;
+        padding: 20px;
+        margin-top: 1%;
+        margin-bottom: 1%;
+        background-color: #DCDADD;
+        width: 100%;
+    }
+    
+    .searchCard input[type=text], input[type=password], select {
+        display: block;
+        font-size: 2rem;       
+    }
+    
+    .searchItem {
+        background-color: #808080;
+        font-size: 2rem;
+        color: #EFEFEF;
+        padding: 5px 5px;
+        margin: 8px 0;
+        margin-right: 4px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        max-width: 48%;
+    }
+    
+    .searchCardButton {
+        display: block;
+        font-size: 2rem;
+        margin: auto;
+    }
+
+
+    /* Login */
+
+    .loginCard {
+        display: none;
+        border-radius: 5px;
+        padding: 20px;
+        margin-top: 5%;
+        width: 90%;
+    }
+    
+    .loginCard input[type=text], input[type=password], select {
+        font-size: 2rem;
+    }
+    .loginCard input[type=button] {
+        font-size: 2rem;
+        overflow-wrap: break-word;
+    }
+
 }

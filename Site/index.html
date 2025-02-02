@@ -12,42 +12,34 @@
 <!---Navbar -->
 <div class="navbar" id="navbar">
   <a><b>CB</b></a>
-    <a>Search</a>
+    <a onclick="displaySearchCard()">Search</a>
     <a onclick="">New Recipe</a>
   <div class="navbar-right">
     <a id="navbarLoginBtn" onclick="displayLoginCard()">Login</a>
   </div>
 </div>
 
-<!--Search Section-->
 <div class="row">
-  <div id="searchCard" class="column searchCard">
-    <!---Filters-->
-    <form>
-      <input type="text" id="searchInput" name="search" placeholder="Search...">
-      <input type="button" class="searchItem" onclick="toggleSearchFilter('Gin')" id="gin_searchfilter" value="Gin">
-      <input type="button" class="searchItem" onclick="toggleSearchFilter('Raspberries')" id="raspberries_searchfilter" value="Raspberries">
-      <input type="button" class="searchItem" onclick="toggleSearchFilter('Ice')" id="ice_searchfilter" value="Ice">
-      <input type="button" class="searchItem" onclick="toggleSearchFilter('Tonic Water')" id="tonic-water_searchfilter" value="Tonic Water">
-      <input type="button" class="searchItem" onclick="toggleSearchFilter('Lemonade')" id="lemonade_searchfilter" value="Lemonade">
-    </form>
-
-    <form>
-      <input type="button" class="searchCardButton" onclick="searchRecipes()" id="" value="Apply">
-     </form>
-
-    </form>
-  </div>
-</div>
-
-<!--Login Section-->
-<div class="row">
-  <div id="loginCard" class="column loginCard">
+  <!--Login Section-->
+  <div id="loginCard" class="loginCard">
     <form>
       <input type="text" id="loginUsername" name="username" placeholder="Username">
       <input type="password" id="loginPassword" name="password" placeholder="Password">
       <input type="button" onclick="loginUser()" id="loginBtn" value="Login">
-      <input type="button" onclick="createUser()" class="btnRight" id="createaccount" value="Create Account & Login">
+      <input type="button" onclick="createUser()" class="btnRight" id="createaccount" value="Create Account">
+    </form>
+  </div>
+
+  <!--Search Section-->
+  <div id="searchCard" class="column searchCard">
+    <!---Filters-->
+    <form id="searchForm">
+      <input type="text" id="searchInput" name="search" placeholder="Search...">
+    </form>
+
+    <form>
+      <input type="button" class="searchCardButton" onclick="searchRecipes()" id="" value="Apply">
+      <p id="searchErrorP"></p>
     </form>
   </div>
 </div>
