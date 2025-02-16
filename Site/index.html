@@ -13,7 +13,7 @@
 <div class="navbar" id="navbar">
   <a><b>CB</b></a>
     <a onclick="displaySearchCard()">Search</a>
-    <a onclick="">New Recipe</a>
+    <a onclick="displayRecipeCreatorCard()">New Recipe</a>
   <div class="navbar-right">
     <a id="navbarLoginBtn" onclick="displayLoginCard()">Login</a>
   </div>
@@ -42,7 +42,47 @@
       <p id="searchErrorP"></p>
     </form>
   </div>
+
+  <div id="recipeCreator" class="recipeCreator">
+    <form>
+      <h1 id="recipeCreator-title">Recipe Creator</h1>
+      <h2>Recipe name (max. 50 characters)</h2>
+      <input type="text" autocomplete="off" id="recipeCreator-recipeName" name="recipe-name" placeholder="A super tasty passion fruit martini...">
+  
+      <h2>Recipe description (max. 200 characters)</h2>
+      <input type="text" autocomplete="off" id="recipeCreator-recipeDescription" name="recipe-description" placeholder="This martini recipe is bursting with flavour...">
+    </form>
+  
+      <div class="recipeCreator-ingredientSelect">
+        <h2>Select existing ingredients</h2>
+        <form id="recipeCreator-ingredientSelect"></form>
+      </div>
+      <div class="recipeCreator-ingredientSelect">
+        <h2>or add a new one </h2>
+        <form>
+          <input type="text" id="recipeCreator-newIngredient" class="recipeCreatorNewIng" placeholder="Some new ingredient">
+          <input class="RecipeCreatorButtonSmall" type="button" value="Add" onclick="recipeCreator_AddNewIngredient()">
+        </form>
+      </div>
+    <!---Method container-->
+    
+    <div class="recipeCreator-method">
+      <form>
+        <p>Step 1</p>
+        <input type="text" autocomplete="off" id="recipeCreator-method1" placeholder="Add 50ml passion fruit liquer to a shaker...">
+      </form>
+
+      <form>
+        <input class="RecipeCreatorButtonSmall" type="button" value="Add new" onclick="recipeCreator_NewMethod()">
+      </form>
+    </div>
+  
+    <input id="recipeCreator-recipeCreationButton" class="RecipeCreatorButton" type="button" onclick="createNewRecipe()" value="Create">
+  </div>
+
 </div>
+
+
 
 <!--Recipe View-->
 <div id="recipeView" class="recipeView">

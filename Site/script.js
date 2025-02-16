@@ -11,8 +11,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // Loads one recipe then calculates how many are needed to fill the viewport
     // and loads the rest
     loadInitialRecipes();
-    // Populate the search filters based on ingredients in the JSON.
-    populateSearchFilters();
+    // Populate the search filters and creation options based on ingredients in the JSON.
+    populateFilters();
 });
 
 // Creates dom element from collection of objects
@@ -173,6 +173,7 @@ function ViewRecipe(event, id, close) {
         document.getElementById("recipeView").style.display = "block";
 
         document.getElementById("recipeView_button").style.display = "block";
+        
     }
 }
 
@@ -183,8 +184,165 @@ function displayLoginCard() {
     document.getElementById("searchCard").style.display = "none";
     document.getElementById("recipeView").style.display = "none";
     document.getElementById("recipeRow").style.display = "none";
+    document.getElementById("recipeCreator").style.display = "none";
 }
 
+// Make recipe creation card visible
+function displayRecipeCreatorCard() {
+    document.getElementById("recipeCreator").style.display = "block";
+    // Hide other cards that clutter the layout
+    document.getElementById("loginCard").style.display = "none";
+    document.getElementById("searchCard").style.display = "none";
+    document.getElementById("recipeView").style.display = "none";
+    document.getElementById("recipeRow").style.display = "none";
+}
+
+// ====================================================================
+//                           RECIPE CREATION  
+// ====================================================================
+
+// Add a new ingredient if it does not exist already (Only permenant on recipe creation)
+function recipeCreator_AddNewIngredient() {
+
+    // Get the value of the new ingredient
+    var newIngredient = document.getElementById("recipeCreator-newIngredient").value;
+    // Conduct input checks
+    if (newIngredient == "") alert("Ingredient cannot be blank!")
+    else if (newIngredient.length > 25) alert("Ingredient must be shorter than 25 characters!")
+    else {
+        // Create toggleable element from the value input
+        const creationDivElement = createSearchFilterElement(newIngredient);
+        creationDivElement.id = "recipeCreator-ingredient-" + newIngredient;
+        creationDivElement.onclick = (event) => toggleIngredient(newIngredient);
+        // Add the element to the list of ingredients
+        document.getElementById("recipeCreator-ingredientSelect").appendChild(creationDivElement);
+
+        // Toggle the ingredient on
+        document.getElementById("recipeCreator-ingredient-" + newIngredient).classList.add("searchItemToggled");
+        ingredientList.push(newIngredient);
+
+        // Reset new ingredient input
+        document.getElementById("recipeCreator-newIngredient").value = "";
+    }
+}
+
+// Number of steps in method
+var methodStepCount = 1;
+// Adds a new method instruction to the recipe creator card
+function recipeCreator_NewMethod() {
+
+    // Get the input for step 1 and duplicate it
+    var elemId = "recipeCreator-method";
+    var elem = document.getElementById(elemId + methodStepCount); 
+    var newElem = elem.cloneNode(true); 
+    // Increment the step count
+    methodStepCount++;
+    // Set cloned elements id and value
+    newElem.setAttribute('id', elemId + methodStepCount);
+    newElem.value = "";
+    
+    // Create a p element containing the step number
+    const p = document.createElement("p");
+    const pVal = document.createTextNode("Step " + methodStepCount);
+    // Append the p element
+    p.appendChild(pVal);
+    // Append the ingredient element
+    var before = elem.nextSibling;
+    // there's no insertAfter, only insertBefore, which is why we found the before
+    elem.parentNode.insertBefore(p, before);
+    elem.parentNode.insertBefore(newElem, before);
+
+}
+
+// List of all ingredients selected in the recipe creator
+var ingredientList = [];
+
+// Toggles adding required ingredient to new recipe
+function toggleIngredient(item) {
+    // Get index of item in searchFilters array
+    let index = ingredientList.indexOf(item);
+    // suffix for each search filter item id
+    var idSuffix = "recipeCreator-ingredient-";
+
+    let itemID = idSuffix + item;
+
+    // If the item is not in the array:
+    if (index == -1) {
+        // Add the item
+        ingredientList.push(item);
+        // Update class list to change colours
+        document.getElementById(itemID).classList.add("searchItemToggled");
+    }
+    // If the item is in the array
+    else {
+        // Remove the item
+        ingredientList.splice(index, 1);
+        // Update class list to change colours
+        document.getElementById(itemID).classList.remove("searchItemToggled");
+    }
+    console.log(ingredientList);
+}
+
+
+// Checks user inputs and adds a recipe to the databased.
+async function createNewRecipe() {
+
+    var ingredients = [];
+
+    let rName = document.getElementById("recipeCreator-recipeName").value;
+    let rDescription = document.getElementById("recipeCreator-recipeDescription").value;
+    let rIngredients = ingredientList;
+    // Perform input checks before continuing
+    if (rName == "" || rDescription == "") alert("Input fields cannot be blank!");
+    if (rName.length > 50 || rDescription.length > 200) alert("Ensure your recipe name and description meet the length requirements!");
+    else if (rIngredients.length == 0) alert("You must select some ingredients!");
+    else if (methodStepCount == 1 && document.getElementById("recipeCreator-method1").value == "") alert("You must have at least one step in the method!");
+    else {
+        let rImage_name = "images/cocktails/cover-1.png";
+        let rMethod = [];
+        let rOwner = loggedInUsersUsername;
+
+        // Get the number of recipes in recipes.json to determine the id of the new one
+        var recipes = loadFile("recipes.json");
+        recipes = JSON.parse(recipes);
+
+        var totalElements = Object.keys(recipes).length;
+        for (let x = 1; x <= methodStepCount; x++) {
+            let currentMethodStepValue = document.getElementById("recipeCreator-method" + x).value
+            // Skip method step if it is empty. 
+            if (currentMethodStepValue != "") rMethod.push(currentMethodStepValue);
+        }
+        let rId = totalElements + 1;
+
+        // Post the request to new_recipe.php
+        const response = await fetch('new_recipe.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: JSON.stringify({
+                id: rId,
+                name: rName,
+                description: rDescription,
+                ingredients: rIngredients,  // Properly formatted array
+                method: rMethod,  // Properly formatted array
+                image_name: rImage_name,
+                owner: rOwner
+            })
+        });
+
+        // Validate response
+        if (!response.ok) {
+            throw new Error("Response invalid");
+        }
+        const result = await response.text();
+        if (result) {
+
+        }
+        // Reload the page
+        location.reload();
+    }
+    
+
+}
 
 
 // ====================================================================
@@ -198,6 +356,7 @@ function displaySearchCard() {
     // Hide other cards that clutter the layout
     document.getElementById("loginCard").style.display = "none";
     document.getElementById("recipeView").style.display = "none";
+    document.getElementById("recipeCreator").style.display = "none";
 }
 
 // Stores applied search filters
@@ -256,7 +415,7 @@ function toggleSearchFilter(item) {
 }
 
 
-function populateSearchFilters() {
+function populateFilters() {
     var recipes = loadFile("recipes.json");
     // Parse as JSON content 
     recipes = JSON.parse(recipes);
@@ -264,8 +423,9 @@ function populateSearchFilters() {
     var ingredients = [];
     // Get number of recipes
     var total = Object.keys(recipes).length;
-    // Start loading recipes from loadedRecipes value to loadedRecipes+count
+    // Increment over every recipe in recipes.json
     for (let i = 0; i < total-1; i++) {
+        // Increment over every ingredient in the recipe of index i
         for (let x = 0; x < recipes[i].ingredients.length; x++) {
             let index = ingredients.indexOf(recipes[i].ingredients[x]);
             if (index == -1) {
@@ -274,6 +434,12 @@ function populateSearchFilters() {
                 divElement.onclick = (event) => toggleSearchFilter(recipes[i].ingredients[x]);
                 // Add element to document
                 document.getElementById("searchForm").appendChild(divElement);
+
+                // Repeat for recipe creation card
+                const creationDivElement = createSearchFilterElement(recipes[i].ingredients[x]);
+                creationDivElement.id = "recipeCreator-ingredient-" + recipes[i].ingredients[x];
+                creationDivElement.onclick = (event) => toggleIngredient(recipes[i].ingredients[x]);
+                document.getElementById("recipeCreator-ingredientSelect").appendChild(creationDivElement);
             }
             else {
                 // Do nothing
@@ -440,6 +606,8 @@ async function createUser() {
 
 var loggedInUser = "";
 
+var loggedInUsersUsername = "";
+
 function loginUser() {
 
     // Get username and password values from login form
@@ -461,6 +629,8 @@ function loginUser() {
         document.getElementById("loginCard").style.display = "none";
         document.getElementById("navbarLoginBtn").innerHTML = "Hello, " + user.username + "!";
         document.getElementById("recipeRow").style.display = "flex";
+        loggedInUsersUsername = user.username;
+        console.log(user + " " + loggedInUsersUsername);
     }
     // Otherwise alert the user something went wrong
     else {
