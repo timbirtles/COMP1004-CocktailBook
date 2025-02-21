@@ -583,22 +583,5 @@
         ],
         "image_name": "images/cocktails/cover-1.png",
         "owner": 1
-    },
-    {
-        "id": 35,
-        "name": "Funky Roku Fizz",
-        "description": "A funky roku fizz recipe!",
-        "ingredients": [
-            "Raspberries",
-            "Lemonade",
-            "Ice"
-        ],
-        "method": [
-            "Muddle a hand full of rasberries",
-            "Add 2 shorts of gin to a glass",
-            "Fill with lemonade."
-        ],
-        "image_name": "images/cocktails/cover-1.png",
-        "owner": ""
     }
 ]

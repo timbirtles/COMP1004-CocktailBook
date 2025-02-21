@@ -148,7 +148,7 @@ body {
     background-color: #DCDADD;
     width: 70%;
     font-family:Arial, Helvetica, sans-serif;
-    max-height: 50vh;
+    max-height: 90vh;
     overflow:visible;
 }
 
@@ -183,7 +183,7 @@ body {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-    max-height: 20vh;
+    max-height: 50vh;
     overflow: scroll;
 
 }
@@ -301,7 +301,7 @@ body {
     max-width: 48%;
 }
 .searchItemToggled {
-    background-color: #c099f1;
+    background-color: #c099f1 !important;
 }
 
 .searchCardButton {

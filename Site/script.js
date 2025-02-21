@@ -1,9 +1,19 @@
-$(window).scroll(function () {
-    if ($(window).scrollTop() + $(window).height() >= $(document).height() - 1) {
-        console.log("scroll");
+// Loads more recipes when the user scrolls near the bottom of the page
+$(window).on('scroll', function() {
+    // Get the scroll position
+    var scrollPosition = $(window).scrollTop() + window.innerHeight;
+    // Get height of page
+    var documentHeight = $(document)[0].documentElement.scrollHeight;
+
+    // Add a buffer to allow for discrepancies (required when testing on mobile)
+    // Also creates a much more seamless scroll on desktop devices.
+    var buffer = 100;
+
+    // Check if user is near the bottom of the page
+    if (scrollPosition + buffer >= documentHeight) 
         loadRecipes(calculateTotalRecipeCards());
-    }
 });
+
 
 // Runs once page content has loaded
 document.addEventListener("DOMContentLoaded", function () {
@@ -71,9 +81,9 @@ function createDomElement(obj) {
 // ====================================================================
 
 function calculateRecipeRowsNeeded() {
-    if (document.getElementById('recipeCard')) {
+    if (document.getElementById('recipeCard0')) {
         // Height of document visible on screen
-        var documentHeight = document.getElementById('recipeCard').clientHeight;
+        var documentHeight = document.getElementById('recipeCard0').clientHeight;
         // Height of navbar
         var navHeight = document.getElementById('navbar').clientHeight;
         // Height without navbar
@@ -107,6 +117,7 @@ function loadInitialRecipes() {
     document.getElementById("recipeRow").innerHTML="";
     loadRecipes(1);
     setTimeout(() => {
+        console.log("count is " + calculateTotalRecipeCards());
         loadRecipes(calculateTotalRecipeCards());
     }, 100);
 }
@@ -127,7 +138,7 @@ function loadRecipes(count) {
             let recipeID = i;
             var recipe = recipes[i];
              // Create new object with each child element (img, title, description, ingredients)
-            const divElement = createRecipeElement(recipe);
+            const divElement = createRecipeElement(recipe, recipeID);
             // Set onclick listener
             divElement.onclick = (event) => ViewRecipe(event, recipeID);
             // Add element to document
@@ -137,6 +148,8 @@ function loadRecipes(count) {
         }
     }
 }
+
+
 
 function ViewRecipe(event, id, close) {
 
@@ -148,18 +161,20 @@ function ViewRecipe(event, id, close) {
     else {
         var recipes = loadFile("recipes.json");
         recipes = JSON.parse(recipes);
+    
 
         // Delete data that may have previously populated the recipe viewer
         document.getElementById("recipeView_ingredient_list").innerHTML="";
         document.getElementById("recipeView_method_list").innerHTML="";
 
+        // Populate ingredient list from JSON entry
         var list = document.getElementById("recipeView_ingredient_list");
         recipes[id].ingredients.forEach((ingredient) => {
             var entry = document.createElement('li');
             entry.appendChild(document.createTextNode(ingredient));
             list.appendChild(entry);
         });
-
+        // Populate method list from JSON entry
         var list = document.getElementById("recipeView_method_list");
         recipes[id].method.forEach((instruction) => {
             var entry = document.createElement('li');
@@ -173,7 +188,8 @@ function ViewRecipe(event, id, close) {
         document.getElementById("recipeView").style.display = "block";
 
         document.getElementById("recipeView_button").style.display = "block";
-        
+
+        document.getElementById("recipeView").scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
     }
 }
 
@@ -189,12 +205,15 @@ function displayLoginCard() {
 
 // Make recipe creation card visible
 function displayRecipeCreatorCard() {
-    document.getElementById("recipeCreator").style.display = "block";
-    // Hide other cards that clutter the layout
-    document.getElementById("loginCard").style.display = "none";
-    document.getElementById("searchCard").style.display = "none";
-    document.getElementById("recipeView").style.display = "none";
-    document.getElementById("recipeRow").style.display = "none";
+    if (!loggedInUsersUsername) alert("You must be logged in to create a recipe!");
+        else {
+        document.getElementById("recipeCreator").style.display = "block";
+        // Hide other cards that clutter the layout
+        document.getElementById("loginCard").style.display = "none";
+        document.getElementById("searchCard").style.display = "none";
+        document.getElementById("recipeView").style.display = "none";
+        document.getElementById("recipeRow").style.display = "none";
+    }
 }
 
 // ====================================================================
@@ -287,11 +306,13 @@ function toggleIngredient(item) {
 // Checks user inputs and adds a recipe to the databased.
 async function createNewRecipe() {
 
-    var ingredients = [];
+    let ingredients = [];
 
     let rName = document.getElementById("recipeCreator-recipeName").value;
     let rDescription = document.getElementById("recipeCreator-recipeDescription").value;
     let rIngredients = ingredientList;
+    let rOwner = loggedInUsersUsername;
+
     // Perform input checks before continuing
     if (rName == "" || rDescription == "") alert("Input fields cannot be blank!");
     if (rName.length > 50 || rDescription.length > 200) alert("Ensure your recipe name and description meet the length requirements!");
@@ -300,7 +321,6 @@ async function createNewRecipe() {
     else {
         let rImage_name = "images/cocktails/cover-1.png";
         let rMethod = [];
-        let rOwner = loggedInUsersUsername;
 
         // Get the number of recipes in recipes.json to determine the id of the new one
         var recipes = loadFile("recipes.json");
@@ -337,7 +357,13 @@ async function createNewRecipe() {
         if (result) {
 
         }
-        // Reload the page
+
+        // Should be reset regardless as the page is reloaded below, 
+        // but variables are re-initialised here to ensure fresh start
+        ingredientList = [];
+        methodStepCount = 1;
+
+        // Reload the page to force update
         location.reload();
     }
     
@@ -424,7 +450,7 @@ function populateFilters() {
     // Get number of recipes
     var total = Object.keys(recipes).length;
     // Increment over every recipe in recipes.json
-    for (let i = 0; i < total-1; i++) {
+    for (let i = 0; i < total; i++) {
         // Increment over every ingredient in the recipe of index i
         for (let x = 0; x < recipes[i].ingredients.length; x++) {
             let index = ingredients.indexOf(recipes[i].ingredients[x]);
@@ -441,9 +467,6 @@ function populateFilters() {
                 creationDivElement.onclick = (event) => toggleIngredient(recipes[i].ingredients[x]);
                 document.getElementById("recipeCreator-ingredientSelect").appendChild(creationDivElement);
             }
-            else {
-                // Do nothing
-            }
         }
     }
 
@@ -458,12 +481,12 @@ function canMakeRecipe(array1, array2) {
 }
 
 // Creates a dom element from a collection of objects
-function createRecipeElement(recipe) {
+function createRecipeElement(recipe, recipeID) {
 
     // Parent object
     const obj = {
         tagName: "DIV",
-        id: "recipeCard" || null,
+        id: "recipeCard" + recipeID || null,
         classList: ["recipe-column", "recipeCard"],
         onClick: null,
         children: []
@@ -603,8 +626,6 @@ async function createUser() {
         console.error("There was a problem with fetch operation");
     }
 }
-
-var loggedInUser = "";
 
 var loggedInUsersUsername = "";
 

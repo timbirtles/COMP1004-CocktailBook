@@ -141,6 +141,11 @@
         border-radius: 4px;
         cursor: pointer;
     }
+
+    /* Recipe creator */
+    .recipeCreator {
+        width: 95%;
+    }
 }
 
 
@@ -272,6 +277,30 @@
     }
 
 
+    /* Recipe creator */
+    .recipeCreator {
+        width: 95%;
+    }
+    .recipeCreator h2 {
+        font-size: 3rem;
+    }
+    .recipeCreator h1 {
+        text-align: center;
+        font-size: 4rem;
+    }
+
+    .RecipeCreatorButtonSmall {
+        font-size: 2rem;
+    }
+
+    .recipeCreatorNewIng {
+        padding: 5px 5px !important;
+        margin: 8px 0;
+        max-width: min-content;
+        box-sizing: border-box;
+        max-height: 100%;
+    }
+
     /* Login */
 
     .loginCard {
@@ -290,4 +319,8 @@
         overflow-wrap: break-word;
     }
 
+    /* Global rules for all classes*/
+    input[type=text], input[type=password], select {
+        font-size: 2rem;
+    }
 }
