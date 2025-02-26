@@ -16,6 +16,7 @@ body {
     text-align: center;
     padding: 25px 16px;
     text-decoration: none;
+    cursor: pointer;
 }
 .navbar a:hover {
     background-color: #c099f1;
@@ -124,17 +125,22 @@ body {
     margin: 0 auto; /* Center the image horizontally */
     max-width: 20%;
 }
+.recipeView-button-container {
+    display: flex; /* This makes the container a flexbox */
+    justify-content: flex-start;
+}
 .recipeView input[type=button] {
     display: none;
-    position: relative;
     background-color: #38343e;
     color: #EFEFEF;
     padding: 14px 20px;
-    margin: 8px 0;
+    margin-top: 8px;
+    margin-right: 3px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
 }
+
 
 
 /* Recipe creation styling ----------------------- */
@@ -212,7 +218,7 @@ body {
 }
 
 .RecipeCreatorButton {
-    width: 100%;
+    width: 48%;
     background-color: #38343e;
     color: #EFEFEF;
     padding: 14px 20px;
@@ -231,6 +237,19 @@ body {
     border-radius: 4px;
     cursor: pointer;
     max-width: 48%;
+}
+
+.RecipeEditorButtonRed {
+    width: fit-content;
+    background-color: #921010;
+    color: #EFEFEF;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    max-width: 48%;
+    
 }
 
 /* Login card styling ----------------------- */

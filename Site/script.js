@@ -75,6 +75,9 @@ function createDomElement(obj) {
     return element;
 }
 
+function loadHome() {
+    location.reload();
+}
 
 // ====================================================================
 //                          VIEW RECIPES  
@@ -159,6 +162,7 @@ function ViewRecipe(event, id, close) {
         document.getElementById("recipeView").style.display = "none";
     }
     else {
+        document.getElementById("recipeCreator").style.display = "none";
         var recipes = loadFile("recipes.json");
         recipes = JSON.parse(recipes);
     
@@ -187,7 +191,16 @@ function ViewRecipe(event, id, close) {
         //document.getElementById("recipeView_ingredient_list").innerText = recipes[id].method;
         document.getElementById("recipeView").style.display = "block";
 
-        document.getElementById("recipeView_button").style.display = "block";
+        document.getElementById("recipeView_button_close").style.display = "block";
+
+        if (loggedInUsersUsername == recipes[id].owner) {
+            let script = "javascript: LoadRecipeEditor(" + id + ");"
+            document.getElementById("recipeView_button_edit").setAttribute( "onClick", script );
+            document.getElementById("recipeView_button_edit").style.display = "block";
+        }
+        else {
+            document.getElementById("recipeView_button_edit").style.display = "none";
+        }
 
         document.getElementById("recipeView").scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
     }
@@ -304,10 +317,10 @@ function toggleIngredient(item) {
 
 
 // Checks user inputs and adds a recipe to the databased.
-async function createNewRecipe() {
+async function manageRecipe(type, recipeID) {
 
     let ingredients = [];
-
+    console.log(type);
     let rName = document.getElementById("recipeCreator-recipeName").value;
     let rDescription = document.getElementById("recipeCreator-recipeDescription").value;
     let rIngredients = ingredientList;
@@ -332,13 +345,14 @@ async function createNewRecipe() {
             // Skip method step if it is empty. 
             if (currentMethodStepValue != "") rMethod.push(currentMethodStepValue);
         }
-        let rId = totalElements + 1;
+        let rId = recipeID ? recipeID : totalElements + 1;
 
-        // Post the request to new_recipe.php
-        const response = await fetch('new_recipe.php', {
+        // Post the request to manage_recipe.php
+        const response = await fetch('manage_recipe.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: JSON.stringify({
+                action: type,
                 id: rId,
                 name: rName,
                 description: rDescription,
@@ -353,10 +367,6 @@ async function createNewRecipe() {
         if (!response.ok) {
             throw new Error("Response invalid");
         }
-        const result = await response.text();
-        if (result) {
-
-        }
 
         // Should be reset regardless as the page is reloaded below, 
         // but variables are re-initialised here to ensure fresh start
@@ -364,11 +374,99 @@ async function createNewRecipe() {
         methodStepCount = 1;
 
         // Reload the page to force update
+        if (type == 0) {
+            alert("Recipe created!");
+        }
+        else if (type == 1) {
+            alert("Recipe updated!");
+        }
+        else {
+            alert("Recipe deleted.");
+        }
         location.reload();
     }
     
 
 }
+
+
+// ====================================================================
+//                           RECIPE EDITOR
+// ====================================================================
+
+// Utilises the recipe creator
+
+function LoadRecipeEditor(id) {
+
+
+    document.getElementById("recipeCreator").style.display = "block";
+    document.getElementById("recipeView").style.display = "none";
+    document.getElementById("recipeRow").style.display = "none";
+
+    var recipes = loadFile("recipes.json");
+    recipes = JSON.parse(recipes);
+    let recipe = recipes[id];
+
+
+    // List of all ingredients selected in the recipe creator
+    ingredientList = [];
+    var total = Object.keys(recipe.ingredients).length;
+    // Increment over every recipe in recipes.json
+    let ingredientIdSuffix = "recipeCreator-ingredient-";
+    for (let i = 0; i < total; i++) {
+        ingredientList.push(recipe.ingredients[i]);
+        document.getElementById(ingredientIdSuffix + recipe.ingredients[i]).classList.add("searchItemToggled");
+    }
+
+    document.getElementById("recipeCreator-title").innerHTML = "Edit Recipe";
+    document.getElementById("recipeCreator-recipeName").value = recipe.name;
+    document.getElementById("recipeCreator-recipeDescription").value = recipe.description;
+    document.getElementById("recipeCreator-recipeCreationButton").value = "Save";
+    document.getElementById("recipeCreator-recipeDeleteButton").style.display = "unset";
+
+    // Required to include arguments
+    let script = "javascript: manageRecipe(1, " + recipe.id + ");"
+    document.getElementById("recipeCreator-recipeCreationButton").setAttribute( "onClick", script );
+
+    script = "javascript: manageRecipe(2, " + recipe.id + ");"
+    document.getElementById("recipeCreator-recipeDeleteButton").setAttribute( "onClick", script );
+
+    var list = document.getElementById("recipeView_method_list");
+    methodStepCount = 0;
+    var total = Object.keys(recipe.method).length;
+    for (let i = 0; i < total; i++) {
+        methodStepCount++;
+        var elemId = "recipeCreator-method";
+
+        if (methodStepCount == 1) {
+            document.getElementById(elemId + methodStepCount).value = recipe.method[i];
+        }
+        else {
+            var elem = document.getElementById(elemId + i); 
+            console.log(elemId + methodStepCount);
+            var newElem = elem.cloneNode(true); 
+            // Increment the step count
+            // Set cloned elements id and value
+            newElem.setAttribute('id', elemId + methodStepCount);
+            newElem.value = recipe.method[i];
+            
+            // Create a p element containing the step number
+            const p = document.createElement("p");
+            const pVal = document.createTextNode("Step " + methodStepCount);
+            // Append the p element
+            p.appendChild(pVal);
+            // Append the ingredient element
+            var before = elem.nextSibling;
+            // there's no insertAfter, only insertBefore, which is why we found the before
+            elem.parentNode.insertBefore(p, before);
+            elem.parentNode.insertBefore(newElem, before);
+        }
+
+    }
+
+    
+}
+
 
 
 // ====================================================================
@@ -441,7 +539,7 @@ function toggleSearchFilter(item) {
 }
 
 
-function populateFilters() {
+function populateFilters(item) {
     var recipes = loadFile("recipes.json");
     // Parse as JSON content 
     recipes = JSON.parse(recipes);
@@ -461,7 +559,7 @@ function populateFilters() {
                 // Add element to document
                 document.getElementById("searchForm").appendChild(divElement);
 
-                // Repeat for recipe creation card
+                // Repeat for recipe creation card if justSearch is false
                 const creationDivElement = createSearchFilterElement(recipes[i].ingredients[x]);
                 creationDivElement.id = "recipeCreator-ingredient-" + recipes[i].ingredients[x];
                 creationDivElement.onclick = (event) => toggleIngredient(recipes[i].ingredients[x]);
