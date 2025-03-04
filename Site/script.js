@@ -153,7 +153,7 @@ function loadRecipes(count) {
 }
 
 
-
+// Load and display all details of a given recipe
 function ViewRecipe(event, id, close) {
 
     // True when close button is pressed
@@ -233,7 +233,8 @@ function displayRecipeCreatorCard() {
 //                           RECIPE CREATION  
 // ====================================================================
 
-// Add a new ingredient if it does not exist already (Only permenant on recipe creation)
+// Add a new ingredient to the selector if it does not exist already 
+// (Only permenant on recipe creation)
 function recipeCreator_AddNewIngredient() {
 
     // Get the value of the new ingredient
@@ -316,7 +317,8 @@ function toggleIngredient(item) {
 }
 
 
-// Checks user inputs and adds a recipe to the databased.
+// Checks user inputs and adds, updates or deletes a recipe
+// depending on 'type' value.
 async function manageRecipe(type, recipeID) {
 
     let ingredients = [];
@@ -575,7 +577,8 @@ function populateFilters(item) {
 
 // Returns true if the all the elements of array1 are present in array2
 function canMakeRecipe(array1, array2) {
-    return array1.every(item => array2.includes(item));
+    if (array2.length == 0) return true;
+    else return array1.every(item => array2.includes(item));
 }
 
 // Creates a dom element from a collection of objects
@@ -627,47 +630,66 @@ function createRecipeElement(recipe, recipeID) {
 }
 
 
-// 
+// Search through recipes based on user input and update displayed recipe cards
 function searchRecipes() {
     // Delete any error text from previous searches
     document.getElementById("searchErrorP").innerHTML="";
+    let searchField = document.getElementById("searchInput").value;
+    searchField = searchField.toString().toLowerCase();
+    
 
-    // Check if any filters have been applied
-    if (searchFilters.length === 0) {
-        // Remove all recipe cards from list
-        loadInitialRecipes();
-
-    }
-    else {
+        //loadInitialRecipes();
 
         var recipes = loadFile("recipes.json");
         // Parse as JSON content 
         recipes = JSON.parse(recipes);
 
+        // Clear displayed recipe cards
         document.getElementById("recipeRow").innerHTML="";
 
         // Get number of recipes
         var total = Object.keys(recipes).length;
-        console.log("filters are " + searchFilters);
-        // Start loading recipes from loadedRecipes value to loadedRecipes+count
+
+        // iterate over recipes
         var recipesFound = 0;
         for (let i = 0; i < total-1; i++) {
-            if (canMakeRecipe(recipes[i].ingredients, searchFilters)) {
-                recipesFound++;
-                console.log("filters match: " + recipes[i].ingredients + " " + searchFilters)
-                let recipeID = i;
-                // Create new object with each element (img, title, description, ingredients)
-                var recipe = recipes[i];
-                const divElement = createRecipeElement(recipe);
-                divElement.onclick = (event) => ViewRecipe(event, recipeID);
-                // Add element to document
-                document.getElementById("recipeRow").appendChild(divElement);
-                
+            let recipeName = recipes[i].name.toString().toLowerCase();
+            // Check if searchField is populated
+            if (searchField != "") {
+                // Check if recipe name contains searchField criteria
+                if (recipeName.includes(searchField)) {
+                    // Check if ingredients selected (if any) match those of the recipe
+                    if (canMakeRecipe(recipes[i].ingredients, searchFilters)) {
+                        recipesFound++;
+                        // Add recipe as card
+                        createSearchedRecipe(i);
+                    }
+                }
+            }
+            // No search field, just ingredients
+            else {
+                // Check if ingredients selected match those of the recipe 
+                if (canMakeRecipe(recipes[i].ingredients, searchFilters)) {
+                    recipesFound++;
+                    // Add recipe as card
+                    createSearchedRecipe(i);
+                }
             }
         }  
         if (recipesFound == 0) {
+            // Create error message if no recipes found.
             document.getElementById("searchErrorP").innerHTML="Could not find any recipes matching the criteria";
         }
+
+    // Creates a recipe card from input information
+    function createSearchedRecipe(i) {
+        // Create new object with each element (img, title, description, ingredients)
+        let recipe = recipes[i];
+        let recipeID = recipe.id;
+        const divElement = createRecipeElement(recipe);
+        divElement.onclick = (event) => ViewRecipe(event, recipeID);
+        // Add element to document
+        document.getElementById("recipeRow").appendChild(divElement);
     }
 }
 
