@@ -17,7 +17,6 @@ $(window).on('scroll', function() {
 
 // Runs once page content has loaded
 document.addEventListener("DOMContentLoaded", function () {
-    console.log($(window).width());
     // Loads one recipe then calculates how many are needed to fill the viewport
     // and loads the rest
     loadInitialRecipes();
@@ -120,7 +119,6 @@ function loadInitialRecipes() {
     document.getElementById("recipeRow").innerHTML="";
     loadRecipes(1);
     setTimeout(() => {
-        console.log("count is " + calculateTotalRecipeCards());
         loadRecipes(calculateTotalRecipeCards());
     }, 100);
 }
@@ -139,9 +137,9 @@ function loadRecipes(count) {
         // Check recipe exists
         if (recipes[i]) {
             let recipeID = i;
-            var recipe = recipes[i];
+            let recipe = recipes[i];
              // Create new object with each child element (img, title, description, ingredients)
-            const divElement = createRecipeElement(recipe, recipeID);
+            const divElement = createRecipeElement(recipe, recipeID, recipes[i].image_name);
             // Set onclick listener
             divElement.onclick = (event) => ViewRecipe(event, recipeID);
             // Add element to document
@@ -165,7 +163,6 @@ function ViewRecipe(event, id, close) {
         document.getElementById("recipeCreator").style.display = "none";
         var recipes = loadFile("recipes.json");
         recipes = JSON.parse(recipes);
-    
 
         // Delete data that may have previously populated the recipe viewer
         document.getElementById("recipeView_ingredient_list").innerHTML="";
@@ -187,7 +184,9 @@ function ViewRecipe(event, id, close) {
         });
 
         document.getElementById("recipeView_title").innerText = recipes[id].name;
+        document.getElementById("recipeView_desc").innerText = recipes[id].description;
         document.getElementById("recipeView_img").src = recipes[id].image_name;
+        document.getElementById("recipeView_credit").href = recipes[id].image_name;
         //document.getElementById("recipeView_ingredient_list").innerText = recipes[id].method;
         document.getElementById("recipeView").style.display = "block";
 
@@ -214,6 +213,28 @@ function displayLoginCard() {
     document.getElementById("recipeView").style.display = "none";
     document.getElementById("recipeRow").style.display = "none";
     document.getElementById("recipeCreator").style.display = "none";
+}
+
+// Make account-options card visible
+function displayAOCard() {
+
+    if (!loggedInUsersUsername) {
+        document.getElementById("loginCard").style.display = "block";
+        // Hide other cards that clutter the layout
+        document.getElementById("searchCard").style.display = "none";
+        document.getElementById("recipeView").style.display = "none";
+        document.getElementById("recipeRow").style.display = "none";
+        document.getElementById("recipeCreator").style.display = "none";
+    }
+    else {
+        document.getElementById("accountOptionsCard").style.display = "block";
+        document.getElementById("loginCard").style.display = "none";
+        // Hide other cards that clutter the layout
+        document.getElementById("searchCard").style.display = "none";
+        document.getElementById("recipeView").style.display = "none";
+        document.getElementById("recipeRow").style.display = "none";
+        document.getElementById("recipeCreator").style.display = "none";
+    }
 }
 
 // Make recipe creation card visible
@@ -313,16 +334,13 @@ function toggleIngredient(item) {
         // Update class list to change colours
         document.getElementById(itemID).classList.remove("searchItemToggled");
     }
-    console.log(ingredientList);
 }
 
 
 // Checks user inputs and adds, updates or deletes a recipe
 // depending on 'type' value.
 async function manageRecipe(type, recipeID) {
-
     let ingredients = [];
-    console.log(type);
     let rName = document.getElementById("recipeCreator-recipeName").value;
     let rDescription = document.getElementById("recipeCreator-recipeDescription").value;
     let rIngredients = ingredientList;
@@ -330,17 +348,22 @@ async function manageRecipe(type, recipeID) {
 
     // Perform input checks before continuing
     if (rName == "" || rDescription == "") alert("Input fields cannot be blank!");
-    if (rName.length > 50 || rDescription.length > 200) alert("Ensure your recipe name and description meet the length requirements!");
+    else if (rName.length > 50 || rDescription.length > 200) alert("Ensure your recipe name and description meet the length requirements!");
     else if (rIngredients.length == 0) alert("You must select some ingredients!");
     else if (methodStepCount == 1 && document.getElementById("recipeCreator-method1").value == "") alert("You must have at least one step in the method!");
     else {
-        let rImage_name = "images/cocktails/cover-1.png";
         let rMethod = [];
 
         // Get the number of recipes in recipes.json to determine the id of the new one
         var recipes = loadFile("recipes.json");
         recipes = JSON.parse(recipes);
-
+        let rImage_name;
+        if (type != 0) { 
+            rImage_name = recipes[recipeID-1].image_name;
+        }
+        else {
+            rImage_name = "images/cocktails/cover-1.png";
+        }       
         var totalElements = Object.keys(recipes).length;
         for (let x = 1; x <= methodStepCount; x++) {
             let currentMethodStepValue = document.getElementById("recipeCreator-method" + x).value
@@ -348,6 +371,7 @@ async function manageRecipe(type, recipeID) {
             if (currentMethodStepValue != "") rMethod.push(currentMethodStepValue);
         }
         let rId = recipeID ? recipeID : totalElements + 1;
+        
 
         // Post the request to manage_recipe.php
         const response = await fetch('manage_recipe.php', {
@@ -367,6 +391,7 @@ async function manageRecipe(type, recipeID) {
 
         // Validate response
         if (!response.ok) {
+            alert(response.text);
             throw new Error("Response invalid");
         }
 
@@ -445,7 +470,6 @@ function LoadRecipeEditor(id) {
         }
         else {
             var elem = document.getElementById(elemId + i); 
-            console.log(elemId + methodStepCount);
             var newElem = elem.cloneNode(true); 
             // Increment the step count
             // Set cloned elements id and value
@@ -537,7 +561,6 @@ function toggleSearchFilter(item) {
         // Update class list to change colours
         document.getElementById(itemID).classList.remove("searchItemToggled");
     }
-    console.log(searchFilters);
 }
 
 
@@ -569,9 +592,6 @@ function populateFilters(item) {
             }
         }
     }
-
-    console.log("Ingredients are " + ingredients);
-
 }
 
 
@@ -582,7 +602,7 @@ function canMakeRecipe(array1, array2) {
 }
 
 // Creates a dom element from a collection of objects
-function createRecipeElement(recipe, recipeID) {
+function createRecipeElement(recipe, recipeID, coverImageURL) {
 
     // Parent object
     const obj = {
@@ -597,7 +617,7 @@ function createRecipeElement(recipe, recipeID) {
         tagName: "img",
         id: "childParagraph",
         attributes: {
-            src: "images/cocktails/cover-1.png"
+            src: coverImageURL
         }
     };
     obj.children.push(imgChild);
@@ -632,6 +652,10 @@ function createRecipeElement(recipe, recipeID) {
 
 // Search through recipes based on user input and update displayed recipe cards
 function searchRecipes() {
+
+    // Set display to 'none' to hide recipeView
+     document.getElementById("recipeView").style.display = "none";
+
     // Delete any error text from previous searches
     document.getElementById("searchErrorP").innerHTML="";
     let searchField = document.getElementById("searchInput").value;
@@ -657,7 +681,7 @@ function searchRecipes() {
             // Check if searchField is populated
             if (searchField != "") {
                 // Check if recipe name contains searchField criteria
-                if (recipeName.includes(searchField)) {
+                if (recipeName.includes(searchField) || recipeName.includes(searchField.replace("&", "and")) || recipeName.includes(searchField.replace("and", "and"))) {
                     // Check if ingredients selected (if any) match those of the recipe
                     if (canMakeRecipe(recipes[i].ingredients, searchFilters)) {
                         recipesFound++;
@@ -686,8 +710,8 @@ function searchRecipes() {
         // Create new object with each element (img, title, description, ingredients)
         let recipe = recipes[i];
         let recipeID = recipe.id;
-        const divElement = createRecipeElement(recipe);
-        divElement.onclick = (event) => ViewRecipe(event, recipeID);
+        const divElement = createRecipeElement(recipe, recipeID, recipe.image_name);
+        divElement.onclick = (event) => ViewRecipe(event, recipeID-1);
         // Add element to document
         document.getElementById("recipeRow").appendChild(divElement);
     }
@@ -695,7 +719,7 @@ function searchRecipes() {
 
 
 // ====================================================================
-//                    LOGIN / ACCOUNT CREATION
+//                    LOGIN / ACCOUNTS
 // ====================================================================
 // Check if username exists in users.json
 function UserExists(username) {
@@ -722,11 +746,10 @@ async function createUser() {
     const username = document.getElementById("loginUsername").value;
     const password = document.getElementById("loginPassword").value;
 
-    try {
         // Check the username is not already in use
         if (!UserExists(username)) {
             // Send POST request to account_creation.php to handle JSON file modification
-            const response = await fetch('account_creation.php', {
+            const response = await fetch('manage_account.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}` // Send username and password in the request body.
@@ -741,10 +764,6 @@ async function createUser() {
             }
 
         }
-    }
-    catch (error) {
-        console.error("There was a problem with fetch operation");
-    }
 }
 
 var loggedInUsersUsername = "";
@@ -771,13 +790,35 @@ function loginUser() {
         document.getElementById("navbarLoginBtn").innerHTML = "Hello, " + user.username + "!";
         document.getElementById("recipeRow").style.display = "flex";
         loggedInUsersUsername = user.username;
-        console.log(user + " " + loggedInUsersUsername);
     }
     // Otherwise alert the user something went wrong
     else {
         alert("Invalid username or password. Please try again");
     }
 }
+
+// Delete currently logged in user account
+async function deleteAccount() {
+
+    // Send request to php file to delete user
+    const response = await fetch('manage_account.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `username=${encodeURIComponent(loggedInUsersUsername)}` // password is left null as not needed
+    });
+
+    if (!response.ok) {
+        throw new Error("Response invalid");
+    }
+    const result = await response.text();
+    if (result) {    
+        alert("Account deleted!");
+        location.reload();
+    }
+
+
+}
+
 
 // ====================================================================
 //                              JSON 

@@ -89,6 +89,7 @@ body {
 }
 .recipeCard img {
     width: 100%;
+    aspect-ratio: 1/1;
 }
 .recipeCard:hover {
     scale: 1.03;
@@ -119,12 +120,20 @@ body {
     font-weight: normal;
     font-size: large;
 }
-.recipeView img {
+.recipeViewSec {
     float: right;
     display: block;
     margin: 0 auto; /* Center the image horizontally */
     max-width: 20%;
 }
+.recipeViewSec img {
+    max-width: 100%;
+}
+.recipeView a {
+    display: block;
+    text-align: center;
+}
+
 .recipeView-button-container {
     display: flex; /* This makes the container a flexbox */
     justify-content: flex-start;
@@ -249,6 +258,7 @@ body {
     border-radius: 4px;
     cursor: pointer;
     max-width: 48%;
+    display:  none;
     
 }
 
@@ -258,6 +268,7 @@ body {
     border-radius: 5px;
     padding: 20px;
     margin-top: 5%;
+    background-color: #DCDADD;
 }
 
 .loginCard input[type=text], input[type=password], select {
@@ -287,6 +298,35 @@ body {
     background-color: #c099f1;
     scale: 1.05;
 }
+
+
+.accountOptions {
+    width: 30%;
+    display: none;
+    border-radius: 5px;
+    padding: 20px;
+    margin-top: 5%;
+    background-color: #DCDADD;
+    text-align: center;
+
+}
+
+.accountOptions input[type=button] {
+    width: 100%;
+    background-color: #921010;
+    color: #EFEFEF;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    max-width: fit-content;
+}
+
+.accountOptions input[type=button]:hover {
+    scale: 1.05;
+}
+
 
 /* search card styling ----------------------- */
 .searchCard {

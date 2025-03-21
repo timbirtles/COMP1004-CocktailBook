@@ -15,7 +15,7 @@
     <a onclick="displaySearchCard()">Search</a>
     <a onclick="displayRecipeCreatorCard()">New Recipe</a>
   <div class="navbar-right">
-    <a id="navbarLoginBtn" onclick="displayLoginCard()">Login</a>
+    <a id="navbarLoginBtn" onclick="displayAOCard()">Login</a>
   </div>
 </div>
 
@@ -27,6 +27,13 @@
       <input type="password" id="loginPassword" name="password" placeholder="Password">
       <input type="button" onclick="loginUser()" id="loginBtn" value="Login">
       <input type="button" onclick="createUser()" class="btnRight" id="createaccount" value="Create Account">
+    </form>
+  </div>
+
+  <div id="accountOptionsCard" class="accountOptions">
+    <h2>Account Options</h2>
+    <form>
+      <input type="button" onclick="deleteAccount()" id="deleteAccountBtn" value="DELETE ACCOUNT">
     </form>
   </div>
 
@@ -87,8 +94,12 @@
 
 <!--Recipe View-->
 <div id="recipeView" class="recipeView">
-  <img id="recipeView_img" src="images/cocktails/cover-1.png" alt="cover image">
+  <div class="recipeViewSec">
+    <img id="recipeView_img" src="images/cocktails/cover-1.png" alt="cover image">
+    <a id="recipeView_credit" href="">Image Credits</a>
+  </div>
   <h1 id="recipeView_title"></h1>
+  <p id="recipeView_desc"></p>
   <h2>Ingredients</h2>
   <ul id="recipeView_ingredient_list"></ul>
   <h2>Method</h2>

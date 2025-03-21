@@ -50,16 +50,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } 
         // Delete recipe
         elseif ($action == 2) { 
-            // Filter recipes that don't match the ID so they are kept
+            // Filter out recipes that don't match the ID
             $filteredData = array_filter($existingData, function ($recipe) use ($id) {
                 return $recipe['id'] !== $id;
             });
 
-            // Check recipe was found and removed
+            // Check the recipe was found and deleted
             if (count($filteredData) < count($existingData)) {
                 $recipeFound = true;
-                // Reindex array
-                $existingData = array_values($filteredData); 
+                
+                // Ddecrement following IDs so that all IDs increment sequentally
+                $existingData = array_values($filteredData);
+                foreach ($existingData as $index => &$recipe) {
+                    $recipe['id'] = $index + 1;
+                }
             }
         }
         // Create new recipe
